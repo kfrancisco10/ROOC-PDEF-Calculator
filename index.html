@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RO · PDEF → RAW Calculator</title>
     <style>
-        /* ----- RO THEME - White, Black, #922432, #FFF400 ----- */
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&display=swap');
 
         * {
@@ -26,7 +25,6 @@
             align-items: center;
             background: #ffffff;
             background-image:
-                /* Diagonal stripe pattern */
                 repeating-linear-gradient(45deg,
                     rgba(146, 36, 50, 0.04) 0px,
                     rgba(146, 36, 50, 0.04) 2px,
@@ -37,7 +35,6 @@
                     rgba(146, 36, 50, 0.04) 2px,
                     transparent 2px,
                     transparent 8px),
-                /* Crosshatch overlay */
                 repeating-linear-gradient(0deg,
                     rgba(0, 0, 0, 0.02) 0px,
                     rgba(0, 0, 0, 0.02) 1px,
@@ -54,7 +51,6 @@
             position: relative;
         }
 
-        /* subtle border pattern overlay */
         body::before {
             content: '';
             position: fixed;
@@ -63,7 +59,6 @@
             right: 0;
             bottom: 0;
             background-image:
-                /* Tiny dot pattern */
                 radial-gradient(circle at 20% 50%, rgba(146, 36, 50, 0.03) 1px, transparent 1px),
                 radial-gradient(circle at 80% 30%, rgba(146, 36, 50, 0.03) 1px, transparent 1px),
                 radial-gradient(circle at 50% 80%, rgba(146, 36, 50, 0.03) 1px, transparent 1px);
@@ -72,9 +67,19 @@
             z-index: 0;
         }
 
-        .card {
-            max-width: 540px;
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1.8rem;
+            max-width: 1100px;
             width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
             background: #ffffff;
             border-radius: 28px 28px 24px 24px;
             padding: 2rem 2rem 2.2rem;
@@ -85,11 +90,11 @@
                 inset 0 0 30px rgba(146, 36, 50, 0.02);
             border: 1px solid rgba(146, 36, 50, 0.15);
             position: relative;
-            z-index: 1;
             transition: 0.2s;
+            flex: 1 1 400px;
+            min-width: 320px;
         }
 
-        /* corner decorations - shield icons */
         .card::before {
             content: '🛡';
             position: absolute;
@@ -113,7 +118,13 @@
             opacity: 0.7;
         }
 
-        /* header */
+        .card-ref {
+            flex: 0 1 340px;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
         .header {
             display: flex;
             align-items: center;
@@ -137,7 +148,6 @@
         }
         h1 small {
             font-size: 0.75rem;
-            font-family: 'Roboto Slab', serif;
             font-weight: 600;
             color: #ffffff;
             background: #922432;
@@ -159,12 +169,17 @@
             border: 1px solid #922432;
             box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.1);
             letter-spacing: 0.04em;
-            font-family: 'Roboto Slab', serif;
         }
 
-        /* input groups */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem 1rem;
+            margin-bottom: 0.6rem;
+        }
+
         .input-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.4rem;
         }
 
         label {
@@ -173,21 +188,19 @@
             align-items: center;
             font-weight: 600;
             color: #000000;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             letter-spacing: 0.02em;
             margin-bottom: 0.2rem;
             padding: 0 0.3rem;
-            font-family: 'Roboto Slab', serif;
         }
         label .hint {
             font-weight: 400;
             color: #922432;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             background: rgba(146, 36, 50, 0.08);
             padding: 0.1rem 0.7rem;
             border-radius: 30px;
             border: 1px solid rgba(146, 36, 50, 0.2);
-            font-family: 'Roboto Slab', serif;
         }
 
         .input-wrapper {
@@ -210,8 +223,8 @@
         .input-wrapper input {
             border: none;
             background: transparent;
-            padding: 0.75rem 0.3rem 0.75rem 0;
-            font-size: 1.1rem;
+            padding: 0.6rem 0.3rem 0.6rem 0;
+            font-size: 1rem;
             font-weight: 600;
             color: #000000;
             width: 100%;
@@ -221,10 +234,8 @@
         .input-wrapper input::placeholder {
             color: #999999;
             font-weight: 400;
-            font-size: 0.9rem;
-            font-family: 'Roboto Slab', serif;
+            font-size: 0.8rem;
         }
-        /* remove number arrows */
         .input-wrapper input[type=number]::-webkit-inner-spin-button,
         .input-wrapper input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -236,30 +247,45 @@
 
         .input-wrapper .suffix {
             background: #922432;
-            padding: 0.5rem 1.2rem;
+            padding: 0.4rem 1rem;
             border-radius: 30px;
             font-weight: 700;
             color: #ffffff;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             border-left: 2px solid #922432;
             letter-spacing: 0.05em;
-            font-family: 'Roboto Slab', serif;
+            white-space: nowrap;
         }
 
-        /* buttons */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1.2rem 0 0.8rem;
+            color: #922432;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .section-divider hr {
+            flex: 1;
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #922432, transparent);
+            opacity: 0.4;
+        }
+
         .action-row {
             display: flex;
             gap: 0.7rem;
-            margin: 1.5rem 0 1.2rem;
+            margin: 0.5rem 0 0.2rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
-            flex: 1;
-            min-width: 110px;
             background: #ffffff;
             border: 2px solid #922432;
-            padding: 0.7rem 0.4rem;
+            padding: 0.7rem 1.8rem;
             border-radius: 40px;
             font-weight: 700;
             font-size: 0.9rem;
@@ -281,68 +307,60 @@
             box-shadow: 0 1px 0 #922432, 0 6px 12px rgba(0, 0, 0, 0.08);
         }
 
-        .btn-primary {
-            background: #922432;
-            background-image: linear-gradient(180deg, #b02a3e 0%, #7a1d2a 100%);
-            color: #ffffff;
-            border-color: #922432;
-            box-shadow: 0 4px 0 #6a1924, 0 6px 12px rgba(0, 0, 0, 0.15);
-            font-family: 'Roboto Slab', serif;
-        }
-        .btn-primary:hover {
-            background-image: linear-gradient(180deg, #c02e44 0%, #922432 100%);
-        }
         .btn-secondary {
             background: #ffffff;
             background-image: linear-gradient(180deg, #ffffff 0%, #f0ece6 100%);
-            font-family: 'Roboto Slab', serif;
         }
         .btn-secondary:hover {
             background-image: linear-gradient(180deg, #ffffff 0%, #e8e0d8 100%);
         }
 
-        /* result box */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .result-grid .full-row {
+            grid-column: 1 / -1;
+        }
+
         .result-box {
             background: #f5f0eb;
             background-image: linear-gradient(145deg, #ffffff, #f0ece6);
-            border-radius: 30px;
-            padding: 1.1rem 1.6rem;
-            margin-top: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
+            border-radius: 24px;
+            padding: 0.7rem 1.2rem;
             border: 2px solid #922432;
             box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
         .result-box .label {
             font-weight: 700;
             color: #000000;
-            font-size: 1rem;
+            font-size: 0.7rem;
             letter-spacing: 0.04em;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-family: 'Roboto Slab', serif;
+            text-transform: uppercase;
+            opacity: 0.7;
         }
         .result-box .value {
-            font-size: 2.1rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #000000;
             background: #ffffff;
-            padding: 0.1rem 1.2rem;
-            border-radius: 40px;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
             border: 2px solid #922432;
             box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
             font-family: 'Roboto Slab', serif;
             letter-spacing: 0.01em;
-            word-break: break-all;
             text-align: right;
-            min-width: 80px;
+            margin-top: 0.2rem;
+            word-break: break-all;
         }
         .result-box .value.warning {
             color: #922432;
-            background: #ffffff;
             border-color: #922432;
         }
         .result-box .value.empty {
@@ -350,39 +368,77 @@
             font-weight: 400;
         }
 
-        /* footnote */
-        .footnote {
-            margin-top: 1rem;
-            font-size: 0.8rem;
-            color: #000000;
-            text-align: center;
-            border-top: 2px dashed #922432;
-            padding-top: 0.8rem;
-            font-weight: 500;
-            background: rgba(146, 36, 50, 0.04);
-            border-radius: 20px;
-            padding: 0.6rem 0.8rem;
-            font-family: 'Roboto Slab', serif;
-        }
-        .footnote kbd {
-            background: #922432;
-            color: #ffffff;
-            padding: 0.1rem 0.7rem;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            border: 1px solid #922432;
-            font-family: 'Roboto Slab', serif;
-        }
-        .footnote span {
-            background: #ffffff;
-            padding: 0.1rem 0.8rem;
-            border-radius: 30px;
-            border: 1px solid rgba(146, 36, 50, 0.2);
-            font-family: 'Roboto Slab', serif;
+        .result-box.highlight {
+            border-color: #922432;
+            background: #fff8f6;
         }
 
-        /* ----- CREDITS - BOTTOM RIGHT OF PAGE ----- */
+        /* REFERENCE CARD */
+        .ref-table-wrap {
+            flex: 1;
+            min-height: 0;
+            border-radius: 20px;
+            border: 2px solid #922432;
+            background: #faf7f4;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .ref-table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            font-family: 'Roboto Slab', serif;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .ref-table-wrap th {
+            background: #922432;
+            color: #ffffff;
+            padding: 0.5rem 0.6rem;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+        .ref-table-wrap th:first-child {
+            border-radius: 18px 0 0 0;
+        }
+        .ref-table-wrap th:last-child {
+            border-radius: 0 18px 0 0;
+        }
+        .ref-table-wrap td {
+            padding: 0.4rem 0.6rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(146, 36, 50, 0.12);
+            color: #000000;
+            font-weight: 500;
+        }
+        .ref-table-wrap tr:nth-child(even) td {
+            background: rgba(146, 36, 50, 0.04);
+        }
+        .ref-table-wrap tr:hover td {
+            background: rgba(146, 36, 50, 0.10);
+        }
+        .ref-table-wrap td:first-child {
+            font-weight: 700;
+            color: #922432;
+        }
+        .ref-table-wrap td:last-child {
+            font-weight: 600;
+        }
+        .ref-table-wrap .table-scroll {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            border-radius: 20px;
+        }
+        .ref-table-wrap .table-scroll table {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
         .page-credits {
             position: fixed;
             bottom: 14px;
@@ -416,12 +472,37 @@
             margin: 0 0.25rem;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 850px) {
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card {
+                flex: 1 1 auto;
+                width: 100%;
+                max-width: 540px;
+            }
+            .card-ref {
+                flex: 1 1 auto;
+                width: 100%;
+                max-width: 540px;
+                min-height: 300px;
+            }
+            .ref-table-wrap {
+                min-height: 200px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
             .card {
                 padding: 1.5rem;
-            }
-            .result-box .value {
-                font-size: 1.6rem;
             }
             h1 {
                 font-size: 1.7rem;
@@ -431,10 +512,8 @@
                 padding: 0.25rem 0.8rem;
                 bottom: 10px;
                 right: 12px;
-                white-space: nowrap;
             }
         }
-
         @media (max-width: 380px) {
             .page-credits {
                 font-size: 0.55rem;
@@ -447,59 +526,104 @@
 </head>
 <body>
 
-    <!-- MAIN CALCULATOR CARD -->
-    <div class="card">
-        <div class="header">
-            <h1>
-                <span>🛡</span> PDEF <small>→ RAW</small>
-            </h1>
-            <div class="subhead">🛡️ <span style="margin-left:6px;">(1 + rate)</span></div>
-        </div>
+    <div class="card-container">
 
-        <!-- PDEF input -->
-        <div class="input-group">
-            <label>
-                <span>📊 PDEF value</span>
-                <span class="hint">input</span>
-            </label>
-            <div class="input-wrapper">
-                <input type="number" id="pdefInput" step="any" placeholder="e.g. 3010">
-                <span class="suffix">PDEF</span>
+        <!-- MAIN CALCULATOR CARD -->
+        <div class="card">
+            <div class="header">
+                <h1>
+                    <span>🛡</span> PDEF <small>→ RAW</small>
+                </h1>
+                <div class="subhead">🛡️ <span style="margin-left:6px;">(1 + rate)</span></div>
+            </div>
+
+            <!-- DEFENDER STATS -->
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-weight: 700; color:#922432; font-size:0.9rem;">🛡️ DEFENDER</span>
+                <span style="font-size:0.7rem; color:#922432; background:rgba(146,36,50,0.08); padding:0.1rem 0.8rem; border-radius:30px;">Equipment & Refine</span>
+            </div>
+            <div class="grid-2col">
+                <div class="input-group">
+                    <label><span>📊 Equipment PDEF</span><span class="hint">input</span></label>
+                    <div class="input-wrapper"><input type="number" id="equipPdef" step="any" placeholder="e.g. 3010"><span class="suffix">PDEF</span></div>
+                </div>
+                <div class="input-group">
+                    <label><span>📈 Equipment PDEF %</span><span class="hint">%</span></label>
+                    <div class="input-wrapper"><input type="number" id="equipPdefPercent" step="any" placeholder="e.g. 23.80"><span class="suffix">%</span></div>
+                </div>
+            </div>
+            <div class="input-group" style="margin-top: 0.2rem;">
+                <label><span>🔧 Refine DEF</span><span class="hint">adds to final</span></label>
+                <div class="input-wrapper"><input type="number" id="refineDef" step="any" placeholder="e.g. 45"><span class="suffix">DEF</span></div>
+            </div>
+
+            <!-- ATTACKER STATS -->
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem;">
+                <span style="font-weight: 700; color:#922432; font-size:0.9rem;">⚔️ ATTACKER</span>
+                <span style="font-size:0.7rem; color:#922432; background:rgba(146,36,50,0.08); padding:0.1rem 0.8rem; border-radius:30px;">Ignore</span>
+            </div>
+            <div class="grid-2col">
+                <div class="input-group">
+                    <label><span>🔻 Flat Ignore DEF</span><span class="hint">input</span></label>
+                    <div class="input-wrapper"><input type="number" id="flatIgnore" step="any" placeholder="e.g. 120"><span class="suffix">ignore</span></div>
+                </div>
+                <div class="input-group">
+                    <label><span>🔻 Ignore DEF %</span><span class="hint">%</span></label>
+                    <div class="input-wrapper"><input type="number" id="ignorePercent" step="any" placeholder="e.g. 15.0" value="0"><span class="suffix">%</span></div>
+                </div>
+            </div>
+
+            <!-- RESET BUTTON - CENTERED -->
+            <div class="action-row" style="margin-top: 0.8rem;">
+                <button class="btn btn-secondary" id="resetBtn">↺ Reset All</button>
+            </div>
+
+            <div class="section-divider"><hr>⚡ RESULTS ⚡<hr></div>
+
+            <!-- RESULTS -->
+            <div class="result-grid">
+                <div class="result-box"><span class="label">🧮 RAW PDEF</span><span class="value empty" id="rawPdef">—</span></div>
+                <div class="result-box"><span class="label">📉 After Flat Ignore</span><span class="value empty" id="afterFlat">—</span></div>
+                <div class="result-box"><span class="label">⚔️ DEF Gap</span><span class="value empty" id="defGap">—</span></div>
+                <div class="result-box"><span class="label">🛡️ DEF + Refine</span><span class="value empty" id="defPlusRefine">—</span></div>
+                <div class="result-box highlight full-row"><span class="label">💥 Damage Multiplier</span><span class="value empty" id="dmgMultiplier">—</span></div>
+                <div class="result-box highlight full-row"><span class="label">📉 Total Reduction</span><span class="value empty" id="totalReduction">—</span></div>
             </div>
         </div>
 
-        <!-- Percentage input -->
-        <div class="input-group">
-            <label>
-                <span>📈 Equipment PDEF Percentage rate</span>
-                <span class="hint">%</span>
-            </label>
-            <div class="input-wrapper">
-                <input type="number" id="percentInput" step="any" placeholder="e.g. 23.80">
-                <span class="suffix">%</span>
+        <!-- REFERENCE CARD -->
+        <div class="card card-ref">
+            <div class="header" style="border-bottom-color:#922432;">
+                <span style="font-weight:700; font-size:1.2rem; color:#922432;">📋 PVP DEF GAP REFERENCE</span>
+                <span style="font-size:0.7rem; background:#922432; color:#fff; padding:0.1rem 0.8rem; border-radius:30px;">reduction</span>
             </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="action-row">
-            <button class="btn btn-primary" id="calcBtn">⚡ Calculate</button>
-            <button class="btn btn-secondary" id="resetBtn">↺ Reset</button>
-        </div>
-
-        <!-- Result -->
-        <div class="result-box" id="resultBox">
-            <span class="label">🧮 RAW PDEF</span>
-            <span class="value empty" id="resultValue">—</span>
-        </div>
-
-        <!-- Footnote -->
-        <div class="footnote">
-            <kbd>formula</kbd>
-            <span id="formulaPreview">enter values to calculate</span>
+            <div class="ref-table-wrap">
+                <div class="table-scroll">
+                    <table>
+                        <thead><tr><th>DEF Gap</th><th>Reduction</th></tr></thead>
+                        <tbody>
+                            <tr><td>0</td><td>0.0%</td></tr>
+                            <tr><td>100</td><td>16.8%</td></tr>
+                            <tr><td>200</td><td>28.8%</td></tr>
+                            <tr><td>300</td><td>37.7%</td></tr>
+                            <tr><td>400</td><td>44.7%</td></tr>
+                            <tr><td>500</td><td>50.3%</td></tr>
+                            <tr><td>600</td><td>54.8%</td></tr>
+                            <tr><td>700</td><td>58.6%</td></tr>
+                            <tr><td>800</td><td>61.8%</td></tr>
+                            <tr><td>1000</td><td>66.9%</td></tr>
+                            <tr><td>1500</td><td>75.2%</td></tr>
+                            <tr><td>2000</td><td>80.2%</td></tr>
+                            <tr><td>3000</td><td>85.8%</td></tr>
+                            <tr><td>3500</td><td>87.6%</td></tr>
+                            <tr><td>4000</td><td>89.0%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- CREDITS - BOTTOM RIGHT OF PAGE -->
     <div class="page-credits">
         <span class="guild-name">Finest Guild</span>
         <span class="sep">·</span>
@@ -508,143 +632,128 @@
 
     <script>
         (function() {
-            const pdefInput = document.getElementById('pdefInput');
-            const percentInput = document.getElementById('percentInput');
-            const resultValue = document.getElementById('resultValue');
-            const formulaPreview = document.getElementById('formulaPreview');
+            const equipPdef = document.getElementById('equipPdef');
+            const equipPdefPercent = document.getElementById('equipPdefPercent');
+            const flatIgnore = document.getElementById('flatIgnore');
+            const ignorePercent = document.getElementById('ignorePercent');
+            const refineDef = document.getElementById('refineDef');
 
-            const calcBtn = document.getElementById('calcBtn');
+            const rawPdefEl = document.getElementById('rawPdef');
+            const afterFlatEl = document.getElementById('afterFlat');
+            const defGapEl = document.getElementById('defGap');
+            const defPlusRefineEl = document.getElementById('defPlusRefine');
+            const dmgMultiplierEl = document.getElementById('dmgMultiplier');
+            const totalReductionEl = document.getElementById('totalReduction');
+
             const resetBtn = document.getElementById('resetBtn');
 
-            function computeRaw(pdef, percent) {
-                if (pdef === undefined || percent === undefined) return null;
-                const pdefNum = parseFloat(pdef);
-                const percentNum = parseFloat(percent);
-                if (isNaN(pdefNum) || isNaN(percentNum)) return null;
-                if (pdefNum === 0) return 0;
-                const divisor = 1 + (percentNum / 100);
-                if (divisor === 0) return null;
-                return pdefNum / divisor;
+            // set default 0 for ignore percent
+            ignorePercent.value = '0';
+
+            function parseVal(el) {
+                const v = el.value.trim();
+                if (v === '') return undefined;
+                const num = parseFloat(v);
+                return isNaN(num) ? undefined : num;
             }
 
-            function formatNumber(num) {
-                if (num === null || num === undefined || !isFinite(num)) return '—';
+            function fmt(num) {
+                if (num === undefined || num === null || !isFinite(num)) return '—';
                 const rounded = Math.round(num * 100) / 100;
-                if (rounded === 0) return '0.00';
                 return rounded.toFixed(2);
             }
 
-            function updateResult() {
-                const pdefRaw = pdefInput.value.trim();
-                const percentRaw = percentInput.value.trim();
-
-                const pdef = parseFloat(pdefRaw);
-                const percent = parseFloat(percentRaw);
-
-                let raw = null;
-                let displayRaw = '—';
-                let previewText = '';
-
-                if (!isNaN(pdef) && !isNaN(percent)) {
-                    raw = computeRaw(pdef, percent);
-                    if (raw !== null && isFinite(raw)) {
-                        displayRaw = formatNumber(raw);
-                        const divisor = (1 + (percent / 100));
-                        const divisorFormatted = formatNumber(divisor);
-                        previewText = `${pdef} ÷ ${divisorFormatted} = ${displayRaw}`;
-                    } else {
-                        displayRaw = 'error';
-                        previewText = '⚠️ invalid divisor';
-                    }
-                } else {
-                    const pdefValid = !isNaN(parseFloat(pdefRaw)) && pdefRaw !== '';
-                    const percentValid = !isNaN(parseFloat(percentRaw)) && percentRaw !== '';
-                    if (!pdefValid && !percentValid) {
-                        previewText = 'enter PDEF and %';
-                    } else if (!pdefValid) {
-                        previewText = 'enter a valid PDEF';
-                    } else if (!percentValid) {
-                        previewText = 'enter a valid percentage';
-                    } else {
-                        previewText = 'check input values';
-                    }
-                    displayRaw = '—';
-                }
-
-                resultValue.textContent = displayRaw;
-                formulaPreview.textContent = previewText;
-
-                if (displayRaw === '—' || displayRaw === 'error' || displayRaw === 'NaN') {
-                    resultValue.classList.add('warning');
-                    resultValue.classList.add('empty');
-                } else {
-                    resultValue.classList.remove('warning');
-                    resultValue.classList.remove('empty');
-                }
+            function fmtPercent(num) {
+                if (num === undefined || num === null || !isFinite(num)) return '—';
+                const percent = num * 100;
+                const rounded = Math.round(percent * 10) / 10;
+                return rounded.toFixed(1) + '%';
             }
 
-            function resetToDefault() {
-                pdefInput.value = '';
-                percentInput.value = '';
-                resultValue.textContent = '—';
-                resultValue.classList.add('warning');
-                resultValue.classList.add('empty');
-                formulaPreview.textContent = 'enter values to calculate';
+            function computeAll() {
+                const ep = parseVal(equipPdef);
+                const epp = parseVal(equipPdefPercent);
+                const flat = parseVal(flatIgnore);
+                const igP = parseVal(ignorePercent);
+                const ref = parseVal(refineDef);
+
+                let raw = undefined;
+                if (ep !== undefined && epp !== undefined && epp !== -100) {
+                    raw = ep / (1 + epp / 100);
+                }
+
+                let afterFlat = undefined;
+                if (raw !== undefined && flat !== undefined) {
+                    afterFlat = Math.max(raw - flat, 0);
+                }
+
+                let defGap = undefined;
+                if (afterFlat !== undefined && epp !== undefined && igP !== undefined) {
+                    defGap = Math.max(afterFlat * (1 + epp / 100) * (1 - igP / 100), 0);
+                }
+
+                let defPlusRefine = undefined;
+                if (defGap !== undefined && ref !== undefined) {
+                    defPlusRefine = defGap + ref;
+                }
+
+                let dmgMultiplier = undefined;
+                if (defPlusRefine !== undefined && defPlusRefine >= 0) {
+                    const denominator = defPlusRefine + 5 * 99;
+                    if (denominator > 0) {
+                        const rawMult = 1 - (defPlusRefine / denominator);
+                        dmgMultiplier = Math.max(rawMult, 0.05);
+                    } else {
+                        dmgMultiplier = 1;
+                    }
+                }
+
+                let totalReduction = undefined;
+                if (dmgMultiplier !== undefined) {
+                    totalReduction = 1 - dmgMultiplier;
+                }
+
+                rawPdefEl.textContent = fmt(raw);
+                afterFlatEl.textContent = fmt(afterFlat);
+                defGapEl.textContent = fmt(defGap);
+                defPlusRefineEl.textContent = fmt(defPlusRefine);
+                dmgMultiplierEl.textContent = fmt(dmgMultiplier);
+                totalReductionEl.textContent = fmtPercent(totalReduction);
+
+                [rawPdefEl, afterFlatEl, defGapEl, defPlusRefineEl, dmgMultiplierEl, totalReductionEl].forEach(el => {
+                    if (el.textContent === '—') {
+                        el.classList.add('empty');
+                        el.classList.add('warning');
+                    } else {
+                        el.classList.remove('empty');
+                        el.classList.remove('warning');
+                    }
+                });
             }
 
-            calcBtn.addEventListener('click', updateResult);
-            resetBtn.addEventListener('click', resetToDefault);
+            function resetAll() {
+                [equipPdef, equipPdefPercent, flatIgnore, refineDef].forEach(el => el.value = '');
+                ignorePercent.value = '0';
+                [rawPdefEl, afterFlatEl, defGapEl, defPlusRefineEl, dmgMultiplierEl, totalReductionEl].forEach(el => {
+                    el.textContent = '—';
+                    el.classList.add('empty');
+                    el.classList.add('warning');
+                });
+            }
 
-            pdefInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') { e.preventDefault();
-                    updateResult(); }
-            });
-            percentInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') { e.preventDefault();
-                    updateResult(); }
-            });
+            resetBtn.addEventListener('click', resetAll);
 
-            pdefInput.addEventListener('blur', updateResult);
-            percentInput.addEventListener('blur', updateResult);
-
-            pdefInput.addEventListener('input', function() {
-                if (this.value === '' && percentInput.value === '') {
-                    formulaPreview.textContent = 'enter PDEF and %';
-                    resultValue.textContent = '—';
-                    resultValue.classList.add('warning');
-                    resultValue.classList.add('empty');
-                } else if (this.value === '') {
-                    formulaPreview.textContent = 'enter a valid PDEF';
-                    resultValue.textContent = '—';
-                    resultValue.classList.add('warning');
-                    resultValue.classList.add('empty');
-                }
-            });
-            percentInput.addEventListener('input', function() {
-                if (this.value === '' && pdefInput.value === '') {
-                    formulaPreview.textContent = 'enter PDEF and %';
-                    resultValue.textContent = '—';
-                    resultValue.classList.add('warning');
-                    resultValue.classList.add('empty');
-                } else if (this.value === '') {
-                    formulaPreview.textContent = 'enter a valid percentage';
-                    resultValue.textContent = '—';
-                    resultValue.classList.add('warning');
-                    resultValue.classList.add('empty');
-                }
+            [equipPdef, equipPdefPercent, flatIgnore, ignorePercent, refineDef].forEach(el => {
+                el.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
+                        computeAll(); } });
+                el.addEventListener('blur', computeAll);
+                el.addEventListener('input', computeAll);
             });
 
-            window.addEventListener('load', () => {
-                pdefInput.value = '';
-                percentInput.value = '';
-                resultValue.textContent = '—';
-                resultValue.classList.add('warning');
-                resultValue.classList.add('empty');
-                formulaPreview.textContent = 'enter values to calculate';
-            });
+            window.addEventListener('load', resetAll);
         })();
     </script>
-    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "714677da3edf4ec4ba7409691785626d"}'></script><!-- End Cloudflare Web Analytics -->
-
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "714677da3edf4ec4ba7409691785626d"}'></script>
 </body>
 </html>
