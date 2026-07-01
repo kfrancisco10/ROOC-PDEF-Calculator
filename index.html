@@ -274,11 +274,18 @@
             opacity: 0.4;
         }
 
-        .action-row {
+        /* BUTTON ROW - Reset and Save in one row */
+        .button-row {
             display: flex;
             gap: 0.7rem;
-            margin: 0.5rem 0 0.2rem;
+            margin: 0.8rem 0 0.2rem;
             flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .button-row .btn {
+            flex: 1;
+            min-width: 120px;
             justify-content: center;
         }
 
@@ -313,6 +320,36 @@
         }
         .btn-secondary:hover {
             background-image: linear-gradient(180deg, #ffffff 0%, #e8e0d8 100%);
+        }
+
+        .btn-save {
+            background: #922432;
+            background-image: linear-gradient(180deg, #922432 0%, #7a1c2a 100%);
+            color: #ffffff;
+            border-color: #922432;
+            box-shadow: 0 4px 0 #5a1420, 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+        .btn-save:hover {
+            background-image: linear-gradient(180deg, #a82a3e 0%, #922432 100%);
+        }
+        .btn-save:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #5a1420, 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-danger {
+            background: #ffffff;
+            background-image: linear-gradient(180deg, #ffffff 0%, #f5f0eb 100%);
+            border-color: #cc0000;
+            color: #cc0000;
+            box-shadow: 0 4px 0 #cc0000, 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+        .btn-danger:hover {
+            background-image: linear-gradient(180deg, #ffe6e6 0%, #f5d0d0 100%);
+        }
+        .btn-danger:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #cc0000, 0 6px 12px rgba(0, 0, 0, 0.08);
         }
 
         .result-grid {
@@ -451,6 +488,195 @@
             overflow: hidden;
         }
 
+        /* SAVED SIDEBAR */
+        .saved-sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            background: #ffffff;
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 3px solid #922432;
+        }
+
+        .saved-sidebar.open {
+            right: 0;
+        }
+
+        .saved-sidebar-header {
+            background: #922432;
+            color: #ffffff;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .saved-sidebar-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .saved-sidebar-header .close-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            opacity: 0.8;
+            transition: 0.2s;
+            font-family: 'Roboto Slab', serif;
+        }
+        .saved-sidebar-header .close-btn:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .saved-sidebar-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.2rem;
+            background: #faf7f4;
+        }
+
+        .saved-item {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.8rem;
+            border: 2px solid #922432;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: 0.15s;
+        }
+        .saved-item:hover {
+            box-shadow: 0 4px 16px rgba(146, 36, 50, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .saved-item .saved-date {
+            font-size: 0.7rem;
+            color: #922432;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .saved-item .saved-date .delete-btn {
+            background: none;
+            border: none;
+            color: #922432;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: 0.15s;
+            padding: 0 0.3rem;
+        }
+        .saved-item .saved-date .delete-btn:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .saved-item .saved-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .saved-item .saved-data .data-label {
+            color: #666;
+            font-weight: 500;
+        }
+        .saved-item .saved-data .data-value {
+            color: #000000;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .saved-empty {
+            text-align: center;
+            color: #999;
+            padding: 3rem 1rem;
+            font-size: 0.95rem;
+        }
+        .saved-empty span {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Clear all button container */
+        .saved-footer {
+            padding: 0.8rem 1.2rem 1.2rem;
+            background: #faf7f4;
+            border-top: 2px solid rgba(146, 36, 50, 0.15);
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .saved-footer .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.6rem;
+        }
+
+        /* SIDEBAR OVERLAY */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* SAVE TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #922432;
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 20px rgba(146, 36, 50, 0.3);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2000;
+            pointer-events: none;
+            font-family: 'Roboto Slab', serif;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
         .page-credits {
             position: fixed;
             bottom: 14px;
@@ -484,6 +710,43 @@
             margin: 0 0.25rem;
         }
 
+        /* SAVED BUTTON IN CORNER */
+        .saved-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #922432;
+            color: #ffffff;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(146, 36, 50, 0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Roboto Slab', serif;
+            transition: 0.15s;
+            border: 2px solid #922432;
+        }
+        .saved-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(146, 36, 50, 0.4);
+        }
+        .saved-toggle-btn .badge {
+            background: #ffffff;
+            color: #922432;
+            border-radius: 50%;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+
         @media (max-width: 850px) {
             .card-container {
                 flex-direction: column;
@@ -502,6 +765,10 @@
             }
             .ref-table-wrap {
                 min-height: 200px;
+            }
+            .saved-sidebar {
+                width: 100%;
+                right: -100%;
             }
         }
 
@@ -528,6 +795,17 @@
                 bottom: 10px;
                 right: 12px;
             }
+            .saved-toggle-btn {
+                top: 10px;
+                right: 10px;
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+            .button-row .btn {
+                min-width: 80px;
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
+            }
         }
         @media (max-width: 380px) {
             .page-credits {
@@ -540,6 +818,32 @@
     </style>
 </head>
 <body>
+
+    <!-- SAVED TOGGLE BUTTON -->
+    <button class="saved-toggle-btn" id="savedToggleBtn">
+        📂 Saved
+        <span class="badge" id="savedBadge">0</span>
+    </button>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SAVED SIDEBAR -->
+    <div class="saved-sidebar" id="savedSidebar">
+        <div class="saved-sidebar-header">
+            <h2>📂 Saved Calculations</h2>
+            <button class="close-btn" id="closeSidebarBtn">✕</button>
+        </div>
+        <div class="saved-sidebar-body" id="savedSidebarBody">
+            <!-- Saved items will be rendered here -->
+        </div>
+        <div class="saved-footer" id="savedFooter">
+            <button class="btn btn-danger" id="clearAllBtn">🗑️ Clear All Data</button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
 
     <div class="card-container">
 
@@ -588,9 +892,10 @@
                 </div>
             </div>
 
-            <!-- RESET BUTTON - CENTERED -->
-            <div class="action-row" style="margin-top: 0.8rem;">
+            <!-- BUTTON ROW - Reset and Save in one row -->
+            <div class="button-row">
                 <button class="btn btn-secondary" id="resetBtn">↺ Reset All</button>
+                <button class="btn btn-save" id="saveBtn">💾 Save</button>
             </div>
 
             <div class="section-divider"><hr>⚡ RESULTS ⚡<hr></div>
@@ -649,6 +954,7 @@
 
     <script>
         (function() {
+            // DOM Elements
             const equipPdef = document.getElementById('equipPdef');
             const equipPdefPercent = document.getElementById('equipPdefPercent');
             const flatIgnore = document.getElementById('flatIgnore');
@@ -663,10 +969,24 @@
             const totalReductionEl = document.getElementById('totalReduction');
 
             const resetBtn = document.getElementById('resetBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
 
-            // set default 0 for ignore percent
+            // Sidebar elements
+            const savedToggleBtn = document.getElementById('savedToggleBtn');
+            const savedSidebar = document.getElementById('savedSidebar');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const savedSidebarBody = document.getElementById('savedSidebarBody');
+            const savedBadge = document.getElementById('savedBadge');
+            const toast = document.getElementById('toast');
+
+            // Set default 0 for ignore percent
             ignorePercent.value = '0';
 
+            let toastTimeout = null;
+
+            // Helper functions
             function parseVal(el) {
                 const v = el.value.trim();
                 if (v === '') return undefined;
@@ -687,7 +1007,7 @@
                 return rounded.toFixed(1) + '%';
             }
 
-            function computeAll() {
+            function getResults() {
                 const ep = parseVal(equipPdef);
                 const epp = parseVal(equipPdefPercent);
                 const flat = parseVal(flatIgnore);
@@ -730,12 +1050,32 @@
                     totalReduction = 1 - dmgMultiplier;
                 }
 
-                rawPdefEl.textContent = fmt(raw);
-                afterFlatEl.textContent = fmt(afterFlat);
-                defGapEl.textContent = fmt(defGap);
-                defPlusRefineEl.textContent = fmt(defPlusRefine);
-                dmgMultiplierEl.textContent = fmt(dmgMultiplier);
-                totalReductionEl.textContent = fmtPercent(totalReduction);
+                return {
+                    raw,
+                    afterFlat,
+                    defGap,
+                    defPlusRefine,
+                    dmgMultiplier,
+                    totalReduction,
+                    inputs: {
+                        equipPdef: ep,
+                        equipPdefPercent: epp,
+                        flatIgnore: flat,
+                        ignorePercent: igP,
+                        refineDef: ref
+                    }
+                };
+            }
+
+            function computeAll() {
+                const results = getResults();
+
+                rawPdefEl.textContent = fmt(results.raw);
+                afterFlatEl.textContent = fmt(results.afterFlat);
+                defGapEl.textContent = fmt(results.defGap);
+                defPlusRefineEl.textContent = fmt(results.defPlusRefine);
+                dmgMultiplierEl.textContent = fmt(results.dmgMultiplier);
+                totalReductionEl.textContent = fmtPercent(results.totalReduction);
 
                 [rawPdefEl, afterFlatEl, defGapEl, defPlusRefineEl, dmgMultiplierEl, totalReductionEl].forEach(el => {
                     if (el.textContent === '—') {
@@ -746,6 +1086,8 @@
                         el.classList.remove('warning');
                     }
                 });
+
+                return results;
             }
 
             function resetAll() {
@@ -758,16 +1100,233 @@
                 });
             }
 
-            resetBtn.addEventListener('click', resetAll);
+            // Save functionality
+            function getSavedData() {
+                try {
+                    const data = localStorage.getItem('pdefCalculatorSaved');
+                    return data ? JSON.parse(data) : [];
+                } catch {
+                    return [];
+                }
+            }
 
+            function saveToLocalStorage(entry) {
+                const saved = getSavedData();
+                saved.push(entry);
+                localStorage.setItem('pdefCalculatorSaved', JSON.stringify(saved));
+                updateBadge();
+                renderSavedItems();
+            }
+
+            function deleteSavedItem(index) {
+                const saved = getSavedData();
+                if (index >= 0 && index < saved.length) {
+                    saved.splice(index, 1);
+                    localStorage.setItem('pdefCalculatorSaved', JSON.stringify(saved));
+                    updateBadge();
+                    renderSavedItems();
+                    showToast('🗑️ Entry deleted');
+                }
+            }
+
+            function clearAllData() {
+                if (getSavedData().length === 0) {
+                    showToast('📭 No data to clear');
+                    return;
+                }
+                if (confirm('⚠️ Are you sure you want to delete ALL saved calculations? This cannot be undone!')) {
+                    localStorage.removeItem('pdefCalculatorSaved');
+                    updateBadge();
+                    renderSavedItems();
+                    showToast('🗑️ All data cleared');
+                }
+            }
+
+            function updateBadge() {
+                const saved = getSavedData();
+                savedBadge.textContent = saved.length;
+            }
+
+            function showToast(message) {
+                if (toastTimeout) {
+                    clearTimeout(toastTimeout);
+                }
+                toast.textContent = message;
+                toast.classList.add('show');
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                    toastTimeout = null;
+                }, 2500);
+            }
+
+            function renderSavedItems() {
+                const saved = getSavedData();
+                if (saved.length === 0) {
+                    savedSidebarBody.innerHTML = `
+                        <div class="saved-empty">
+                            <span>📭</span>
+                            No saved calculations yet.<br>
+                            Save your first calculation!
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                saved.forEach((entry, index) => {
+                    const date = new Date(entry.timestamp);
+                    const dateStr = date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    const timeStr = date.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    html += `
+                        <div class="saved-item">
+                            <div class="saved-date">
+                                <span>📅 ${dateStr} at ${timeStr}</span>
+                                <button class="delete-btn" data-index="${index}" title="Delete entry">✕</button>
+                            </div>
+                            <div class="saved-data">
+                                <span class="data-label">Equipment PDEF:</span>
+                                <span class="data-value">${entry.inputs.equipPdef || '—'}</span>
+                                <span class="data-label">Equipment PDEF %:</span>
+                                <span class="data-value">${entry.inputs.equipPdefPercent || '—'}%</span>
+                                <span class="data-label">Refine DEF:</span>
+                                <span class="data-value">${entry.inputs.refineDef || '—'}</span>
+                                <span class="data-label">Flat Ignore:</span>
+                                <span class="data-value">${entry.inputs.flatIgnore || '—'}</span>
+                                <span class="data-label">Ignore %:</span>
+                                <span class="data-value">${entry.inputs.ignorePercent || '0'}%</span>
+                                <span class="data-label">RAW PDEF:</span>
+                                <span class="data-value">${entry.raw}</span>
+                                <span class="data-label">After Flat Ignore:</span>
+                                <span class="data-value">${entry.afterFlat}</span>
+                                <span class="data-label">DEF Gap:</span>
+                                <span class="data-value">${entry.defGap}</span>
+                                <span class="data-label">DEF + Refine:</span>
+                                <span class="data-value">${entry.defPlusRefine}</span>
+                                <span class="data-label">Damage Multiplier:</span>
+                                <span class="data-value">${entry.dmgMultiplier}</span>
+                                <span class="data-label">Total Reduction:</span>
+                                <span class="data-value">${entry.totalReduction}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                savedSidebarBody.innerHTML = html;
+
+                // Add delete event listeners
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = parseInt(this.dataset.index);
+                        if (confirm('Delete this saved entry?')) {
+                            deleteSavedItem(index);
+                        }
+                    });
+                });
+            }
+
+            function openSidebar() {
+                savedSidebar.classList.add('open');
+                sidebarOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                renderSavedItems();
+            }
+
+            function closeSidebar() {
+                savedSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function toggleSidebar() {
+                if (savedSidebar.classList.contains('open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            }
+
+            // Save current calculation
+            function saveCurrentCalculation() {
+                const results = computeAll();
+                const inputs = {
+                    equipPdef: parseVal(equipPdef) || null,
+                    equipPdefPercent: parseVal(equipPdefPercent) || null,
+                    flatIgnore: parseVal(flatIgnore) || null,
+                    ignorePercent: parseVal(ignorePercent) || null,
+                    refineDef: parseVal(refineDef) || null
+                };
+
+                // Check if we have at least some data
+                const hasData = Object.values(inputs).some(v => v !== null);
+                if (!hasData) {
+                    showToast('⚠️ Please enter some values first!');
+                    return;
+                }
+
+                const entry = {
+                    timestamp: Date.now(),
+                    inputs: inputs,
+                    raw: results.raw !== undefined ? fmt(results.raw) : '—',
+                    afterFlat: results.afterFlat !== undefined ? fmt(results.afterFlat) : '—',
+                    defGap: results.defGap !== undefined ? fmt(results.defGap) : '—',
+                    defPlusRefine: results.defPlusRefine !== undefined ? fmt(results.defPlusRefine) : '—',
+                    dmgMultiplier: results.dmgMultiplier !== undefined ? fmt(results.dmgMultiplier) : '—',
+                    totalReduction: results.totalReduction !== undefined ? fmtPercent(results.totalReduction) : '—'
+                };
+
+                saveToLocalStorage(entry);
+                showToast('✅ Calculation saved!');
+            }
+
+            // Event Listeners
+            resetBtn.addEventListener('click', resetAll);
+            saveBtn.addEventListener('click', saveCurrentCalculation);
+            clearAllBtn.addEventListener('click', clearAllData);
+
+            savedToggleBtn.addEventListener('click', toggleSidebar);
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Keyboard shortcut: Escape to close sidebar
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && savedSidebar.classList.contains('open')) {
+                    closeSidebar();
+                }
+                // Ctrl+S to save
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    saveCurrentCalculation();
+                }
+            });
+
+            // Auto-calculate on input
             [equipPdef, equipPdefPercent, flatIgnore, ignorePercent, refineDef].forEach(el => {
-                el.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
-                        computeAll(); } });
+                el.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        computeAll();
+                    }
+                });
                 el.addEventListener('blur', computeAll);
                 el.addEventListener('input', computeAll);
             });
 
-            window.addEventListener('load', resetAll);
+            // Initialize
+            window.addEventListener('load', () => {
+                resetAll();
+                updateBadge();
+            });
+
+            console.log('💡 Press Ctrl+S to save calculation');
         })();
     </script>
     <!-- Cloudflare Web Analytics -->
