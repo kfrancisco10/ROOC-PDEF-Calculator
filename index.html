@@ -373,6 +373,18 @@
             background: #fff8f6;
         }
 
+        .result-box.highlight .value {
+            border-color: #922432;
+            background: #fff8f6;
+        }
+
+        .result-grid .highlight-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
         /* REFERENCE CARD */
         .ref-table-wrap {
             flex: 1;
@@ -501,6 +513,9 @@
             .result-grid {
                 grid-template-columns: 1fr;
             }
+            .result-grid .highlight-row {
+                grid-template-columns: 1fr;
+            }
             .card {
                 padding: 1.5rem;
             }
@@ -586,8 +601,10 @@
                 <div class="result-box"><span class="label">📉 After Flat Ignore</span><span class="value empty" id="afterFlat">—</span></div>
                 <div class="result-box"><span class="label">⚔️ DEF Gap</span><span class="value empty" id="defGap">—</span></div>
                 <div class="result-box"><span class="label">🛡️ DEF + Refine</span><span class="value empty" id="defPlusRefine">—</span></div>
-                <div class="result-box highlight full-row"><span class="label">💥 Damage Multiplier</span><span class="value empty" id="dmgMultiplier">—</span></div>
-                <div class="result-box highlight full-row"><span class="label">📉 Total Reduction</span><span class="value empty" id="totalReduction">—</span></div>
+                <div class="full-row highlight-row">
+                    <div class="result-box highlight"><span class="label">💥 Damage Multiplier</span><span class="value empty" id="dmgMultiplier">—</span></div>
+                    <div class="result-box highlight"><span class="label">📉 Total Reduction</span><span class="value empty" id="totalReduction">—</span></div>
+                </div>
             </div>
         </div>
 
